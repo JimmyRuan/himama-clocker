@@ -1,10 +1,11 @@
 class ClocksController < ApplicationController
   before_action :set_clock, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /clocks
   # GET /clocks.json
   def index
-    @clocks = Clock.all
+    @clocks = current_user.clocks().order(created_at: :desc).all
   end
 
   # GET /clocks/1
@@ -15,6 +16,7 @@ class ClocksController < ApplicationController
   # GET /clocks/new
   def new
     @clock = Clock.new
+    @clock_message = is_next_clock_in ? 'Clock In' : 'Clock Out'
   end
 
   # GET /clocks/1/edit
@@ -24,13 +26,15 @@ class ClocksController < ApplicationController
   # POST /clocks
   # POST /clocks.json
   def create
-    @clock = Clock.new(clock_params)
+    @clock = Clock.new
+    @clock.clocked_in = is_next_clock_in
+    @clock.user = current_user
+    message = @clock.clocked_in ? 'clocked in' : 'clocked out'
 
-    respond_to do |format|
-      if @clock.save
-        format.html { redirect_to @clock, notice: 'Clock was successfully created.' }
-        format.json { render :show, status: :created, location: @clock }
-      else
+    if @clock.save
+      redirect_to clocks_path
+    else
+      respond_to do |format|
         format.html { render :new }
         format.json { render json: @clock.errors, status: :unprocessable_entity }
       end
@@ -70,5 +74,10 @@ class ClocksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def clock_params
       params.require(:clock).permit(:clocked_in, :user_id)
+    end
+
+    def is_next_clock_in
+      last_clock = current_user.clocks().order(created_at: :desc).first
+      last_clock ? ! last_clock.clocked_in : true
     end
 end
