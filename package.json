@@ -2,7 +2,9 @@
   "name": "himama-clocker",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "^4.0.7"
+    "@rails/webpacker": "^4.0.7",
+    "moment": "^2.24.0",
+    "tailwindcss": "~1.0.0"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.8.1"

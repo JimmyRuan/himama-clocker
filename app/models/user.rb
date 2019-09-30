@@ -5,4 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :clocks
+
+  validates :username, presence: true, length: { minimum: 5 }, uniqueness: true
 end

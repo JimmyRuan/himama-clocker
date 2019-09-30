@@ -1,29 +1,40 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Clocks</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Clocked in</th>
-      <th>User</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @clocks.each do |clock| %>
+<div class="shadow-md rounded px-0 pt-6 pb-0 w-full md:w-3/4 flex text-center">
+  <div class="bg-white shadow-md rounded w-full">
+    <table class="text-left w-full border-collapse">
+      <thead>
       <tr>
-        <td><%= clock.clocked_in %></td>
-        <td><%= clock.user %></td>
-        <td><%= link_to 'Show', clock %></td>
-        <td><%= link_to 'Edit', edit_clock_path(clock) %></td>
-        <td><%= link_to 'Destroy', clock, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Clock-In Time</th>
+        <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Clock-Out Time</th>
+        <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Duration(HH::MM::SS)</th>
+        <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+      <% @clocks.each do |clock| %>
+        <tr class="hover:bg-gray-500">
+          <td class="py-4 px-6 border-b border-grey-light">
+            <%= display_time(clock.clock_in_time) %>
+          </td>
+          <td class="py-4 px-6 border-b border-grey-light">
+            <%= display_time(clock.clock_out_time) %>
+          </td>
+          <td class="py-4 px-6 border-b border-grey-light">
+            <%= display_duration(clock.clock_out_time, clock.clock_in_time) %>
+          </td>
+          <td class="py-4 px-6 border-b border-grey-light">
+            <%= link_to 'Edit', edit_clock_path(clock),
+                        class: 'text-grey-lighter font-bold py-1 px-3 rounded text-xs hover:text-white' %>
 
-<br>
+            <%= link_to 'Destroy', clock, method: :delete, data: { confirm: 'Are you sure that you want to delete this record?' },
+                        class: 'text-grey-lighter font-bold py-1 px-3 rounded text-xs hover:text-white'%>
+          </td>
+        </tr>
+      <% end %>
 
-<%= link_to 'New Clock', new_clock_path %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+

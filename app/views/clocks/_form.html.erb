@@ -1,17 +1,5 @@
-<%= form_with(model: @clock, local: true) do |form| %>
-  <% if clock.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(clock.errors.count, "error") %> prohibited this clock from being saved:</h2>
-
-      <ul>
-      <% clock.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form.submit @clock_message %>
-  </div>
+<%= form_with(model: @clock, local: true, html: {class: 'shadow-md rounded px-0 pt-6 pb-0 w-full md:w-3/4'}) do |form| %>
+  <input type="submit" class='text-white text-6xl py-20 px-4 border border-blue-500 rounded cursor-pointer
+            w-full bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline'
+         value="<%= @clock_message %>">
 <% end %>

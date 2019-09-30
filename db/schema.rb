@@ -13,7 +13,8 @@
 ActiveRecord::Schema.define(version: 2019_09_28_215004) do
 
   create_table "clocks", force: :cascade do |t|
-    t.boolean "clocked_in"
+    t.datetime "clock_in_time", null: false
+    t.datetime "clock_out_time"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -26,6 +27,7 @@ ActiveRecord::Schema.define(version: 2019_09_28_215004) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.string "username", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true

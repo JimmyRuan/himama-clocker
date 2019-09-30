@@ -16,7 +16,7 @@ class ClocksController < ApplicationController
   # GET /clocks/new
   def new
     @clock = Clock.new
-    @clock_message = is_next_clock_in ? 'Clock In' : 'Clock Out'
+    @clock_message = is_next_clock_in ? 'Clock-In' : 'Clock-Out'
   end
 
   # GET /clocks/1/edit
@@ -26,10 +26,17 @@ class ClocksController < ApplicationController
   # POST /clocks
   # POST /clocks.json
   def create
-    @clock = Clock.new
-    @clock.clocked_in = is_next_clock_in
-    @clock.user = current_user
-    message = @clock.clocked_in ? 'clocked in' : 'clocked out'
+    last_clock = get_last_clock
+
+
+    if last_clock.blank? || last_clock.clock_out_time
+      @clock = Clock.new
+      @clock.clock_in_time = DateTime.now.utc
+      @clock.user = current_user
+    else
+      @clock = last_clock
+      @clock.clock_out_time = DateTime.now.utc
+    end
 
     if @clock.save
       redirect_to clocks_path
@@ -77,7 +84,12 @@ class ClocksController < ApplicationController
     end
 
     def is_next_clock_in
-      last_clock = current_user.clocks().order(created_at: :desc).first
-      last_clock ? ! last_clock.clocked_in : true
+      last_clock = get_last_clock
+      # if this session is already checked out, a new clock session should be "clock-in"
+      last_clock ?  !!last_clock.clock_out_time : true
+    end
+
+    def get_last_clock
+      current_user.clocks().order(created_at: :desc).all.first
     end
 end
