@@ -17,6 +17,5 @@
 
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import "moment";
 import './stylesheets.css'
-// import "../css/application.css"
+import './clocking-events'

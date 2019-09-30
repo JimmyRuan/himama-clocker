@@ -11,6 +11,7 @@ class ClocksController < ApplicationController
   # GET /clocks/1
   # GET /clocks/1.json
   def show
+    redirect_to edit_clock_path
   end
 
   # GET /clocks/new
@@ -51,15 +52,25 @@ class ClocksController < ApplicationController
   # PATCH/PUT /clocks/1
   # PATCH/PUT /clocks/1.json
   def update
-    respond_to do |format|
-      if @clock.update(clock_params)
-        format.html { redirect_to @clock, notice: 'Clock was successfully updated.' }
-        format.json { render :show, status: :ok, location: @clock }
+      clock_in_time = Time.zone.parse(params['clock']['clock_in_time'])
+      clock_out_time = Time.zone.parse(params['clock']['clock_out_time'])
+
+      if clock_in_time.blank? || clock_out_time.blank?
+        @clock.errors.add(:clock_in_time, '=> Invalid daytime value') if clock_in_time.blank?
+        @clock.errors.add(:clock_out_time, '=> Invalid daytime value') if clock_out_time.blank?
       else
-        format.html { render :edit }
-        format.json { render json: @clock.errors, status: :unprocessable_entity }
+        @clock.clock_in_time = clock_in_time.to_datetime.utc
+        @clock.clock_out_time = clock_out_time.to_datetime.utc
       end
-    end
+
+      if ! @clock.errors.any? && @clock.save
+        redirect_to clocks_path
+      else
+        respond_to do |format|
+          format.html { render :edit }
+          format.json { render json: @clock.errors, status: :unprocessable_entity }
+        end
+      end
   end
 
   # DELETE /clocks/1

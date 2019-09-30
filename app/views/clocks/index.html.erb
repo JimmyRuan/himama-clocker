@@ -1,4 +1,4 @@
-<div class="shadow-md rounded px-0 pt-6 pb-0 w-full md:w-3/4 flex text-center">
+<div id='clocking_events' class="shadow-md rounded px-0 pt-6 pb-0 w-full md:w-3/4 flex text-center">
   <div class="bg-white shadow-md rounded w-full">
     <table class="text-left w-full border-collapse">
       <thead>
@@ -12,10 +12,10 @@
       <tbody>
       <% @clocks.each do |clock| %>
         <tr class="hover:bg-gray-500">
-          <td class="py-4 px-6 border-b border-grey-light">
+          <td class="py-4 px-6 border-b border-grey-light clock_time">
             <%= display_time(clock.clock_in_time) %>
           </td>
-          <td class="py-4 px-6 border-b border-grey-light">
+          <td class="py-4 px-6 border-b border-grey-light clock_time">
             <%= display_time(clock.clock_out_time) %>
           </td>
           <td class="py-4 px-6 border-b border-grey-light">
